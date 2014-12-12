@@ -1,0 +1,27 @@
+*
+{
+border:0px;
+margin:0px;
+padding:0px;
+}
+
+#sidebar
+{
+padding:10px;
+margin:10px;
+margin-top:0px;
+float:left;
+border-right:1px solid black;
+height:100%;
+}
+
+#text
+{
+padding:10px;
+}
+
+button
+{
+padding:3px;
+margin:5px;
+}
