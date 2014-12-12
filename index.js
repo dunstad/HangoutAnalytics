@@ -83,6 +83,7 @@ function createEasyMessage(message) {
 	}
 	
 	easyMessage.sender = PARTICIPANTS[message.sender_id.chat_id];
+	// google's timestamp format doesn't play nice with Date's constructor
 	easyMessage.time = parseInt(message.timestamp.substring(0, message.timestamp.length - 3));
 	easyMessage.toString = function() {
 		
@@ -130,6 +131,9 @@ function showRandomMessage() {
 function whoseLineIsItAnyway() {
 	
 	var randomMessage = getMessageData(randInt(0, MESSAGELIST.length));
+	// will run forever if nobody has ever sent a message longer than 4 characters
+	// in which case why are you even using this code
+	while (randomMessage.text.length < 4) {randomMessage = getMessageData(randInt(0, MESSAGELIST.length));}
 	var button = "<br/><button type=\"button\" onclick=\"showHidden()\">Reveal Answer</button>";
 	document.getElementById("text").innerHTML = "";
 	document.getElementById("text").innerHTML += "<span id=\"hidden\" style=\"display:none;\">" + randomMessage.sender + ": </span>" + randomMessage.text + button +  "<br/><br/>";
@@ -238,7 +242,7 @@ function commentsByUser() {
 	
 }
 
-// but hey it works
+// but hey it works... kinda
 function showComments(name) {
 	
 	document.getElementById("text").innerHTML = "";
