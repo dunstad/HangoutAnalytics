@@ -12,6 +12,7 @@ var jsonLocation = getCookie("jsonLocation");
 // need this line while we're local only
 // just store the json in the same folder as this
 if (jsonLocation === "") {jsonLocation = "Hangouts.js";}
+// if (jsonLocation === "") {jsonLocation = "Messages.js";}
 
 // this will work when it's up on a real website,
 // but cookies don't work on file:/// webpages by default.
@@ -33,5 +34,6 @@ function loadJavascript() {
 	
 	document.head.appendChild(createScriptElement("readJSON.js"));
 	document.head.appendChild(createScriptElement("queries.js"));
+	// document.head.appendChild(createScriptElement("fastQueries.js"));
 	
 }
