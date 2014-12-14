@@ -19,7 +19,7 @@ function whoseLineIsItAnyway() {
 	
 	var randomMessage = getMessageData(randInt(0, MESSAGELIST.length));
 	// will run forever if nobody has ever sent a message longer than 4 characters
-	// in which case why are you even using this code
+	// in which case why are you even using this program
 	while (randomMessage.text.length < 4) {randomMessage = getMessageData(randInt(0, MESSAGELIST.length));}
 	var button = "<br/><button type=\"button\" onclick=\"showHidden()\">Reveal Answer</button>";
 	document.getElementById("text").innerHTML = "";
