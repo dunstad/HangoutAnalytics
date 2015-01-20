@@ -1,3 +1,41 @@
+// begin throwing away google's secrets if that hasn't been done already
+window.onload = function() {
+	
+	if (localStorage.MESSAGES === undefined) {
+		
+		var fileForm = document.getElementById("file");
+		fileForm.onchange = function() {
+			
+			var file = fileForm.files[0];
+			var reader = new FileReader();
+			reader.onload = loadJavascript;
+			reader.readAsText(file);
+			
+			
+		}
+		
+	}
+	
+	else {
+		
+		// just copied this from below. yes, i feel dirty.
+		document.head.appendChild(createScriptElement("readJSON.js"));
+		document.head.appendChild(createScriptElement("fastQueries.js"));
+		
+		// hope you didn't want to change which file you have loaded in
+		var fileForm = document.getElementById("file")
+		var sidebar = fileForm.parentNode;
+		
+		// i'm going to programmer hell
+		sidebar.removeChild(sidebar.childNodes[0]);
+		sidebar.removeChild(sidebar.childNodes[0]);
+		sidebar.removeChild(sidebar.childNodes[0]);
+		sidebar.removeChild(sidebar.childNodes[0]);
+		
+	}
+	
+}
+
 function createScriptElement(name) {
 		
 	var script = document.createElement('script');
@@ -7,33 +45,10 @@ function createScriptElement(name) {
 	
 }
 
-var jsonLocation = getCookie("jsonLocation");
-
-// need this line while we're local only
-// just store the json in the same folder as this
-if (jsonLocation === "") {jsonLocation = "Hangouts.js";}
-// if (jsonLocation === "") {jsonLocation = "Messages.js";}
-
-// this will work when it's up on a real website,
-// but cookies don't work on file:/// webpages by default.
-// the use case is if you don't have the site locally,
-// then you can just supply the data.
-if (jsonLocation === "") {
+function loadJavascript(e) {
 	
-	// file:///C:/Users/Dunstad/Dropbox/Web/HangoutStats/Hangouts.js
-	jsonLocation = prompt("Where is your Hangouts data? (Ex. file:///C:/Hangouts.js)");
-	setCookie("jsonLocation", jsonLocation, 9999);
-	
-}
-
-var json = createScriptElement(jsonLocation);
-json.setAttribute("onload", "loadJavascript()");
-document.head.appendChild(json);
-
-function loadJavascript() {
-	
+	DATA = JSON.parse(e.target.result);
 	document.head.appendChild(createScriptElement("readJSON.js"));
-	document.head.appendChild(createScriptElement("queries.js"));
-	// document.head.appendChild(createScriptElement("fastQueries.js"));
+	document.head.appendChild(createScriptElement("fastQueries.js"));
 	
 }

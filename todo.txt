@@ -1,10 +1,9 @@
 improvements
-	set up test and prod on a domain, then link those to github branches
-	there's a short loading period while the json loads, would be nice if there was an indicator that was happening.
-	would also be nice if we could use an actual json file rather than one hacked into js
-	some sort of loading system so that comments by user can not crash the browser for talkative people
-	streamline json file to improve performance
 	fix the css so that the sidebar is always as tall as the whole page
+	disable links until a file is selected
+	validate that it's a json file?
+	allow user to choose which conversation the data comes from, rather than defaulting to the longest one
+	add the ability to store larger message lists
 
 features
 	humor stats

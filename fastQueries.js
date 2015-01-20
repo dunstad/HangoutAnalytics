@@ -8,11 +8,17 @@ function randInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+function toString(message) {		
+	
+	return message.sender + ": " + message.text + "<br/>" + new Date(message.time);
+	
+}
+
 function showRandomMessage() {
 	
 	var randomMessage = MESSAGES[randInt(0, MESSAGES.length)];
 	document.getElementById("text").innerHTML = "";
-	document.getElementById("text").innerHTML = randomMessage.toString() + "<br/><br/>";
+	document.getElementById("text").innerHTML = toString(randomMessage) + "<br/><br/>";
 	
 }
 
@@ -43,7 +49,7 @@ function longest100() {
 	document.getElementById("text").innerHTML = "";
 	for (var i = 0; i < 100; i++) {
 		
-		document.getElementById("text").innerHTML += MESSAGES[i].toString() + "<br/><br/>";
+		document.getElementById("text").innerHTML += toString(MESSAGES[i]) + "<br/><br/>";
 		
 	}
 	
@@ -143,11 +149,14 @@ function commentsByUser() {
 // but hey it works... kinda
 function showComments(name) {
 	
-	document.getElementById("text").innerHTML = "";
+	var userComments = "";
 	for (var i = 0; i < PROFILES[name].length; i++) {
 		
-		document.getElementById("text").innerHTML += PROFILES[name][i].toString() + "<br/><br/>"
+		userComments += toString(PROFILES[name][i]) + "<br/><br/>"
 		
 	}
+	
+	document.getElementById("text").innerHTML = "";
+	document.getElementById("text").innerHTML = userComments;
 	
 }

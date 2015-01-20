@@ -1,8 +1,43 @@
 // reading the source code? what a nerd
 
-var CONVERSATION = DATA.conversation_state[1];
-var MESSAGELIST = CONVERSATION.conversation_state.event;
-var PARTICIPANTS = createParticipantMap(CONVERSATION);
+if (localStorage.MESSAGES === undefined) {
+	
+	// use the data from the longest conversation
+	var conversationNumber = 0;
+	var conversationLength = 0;
+	for (var i = 0; i < DATA.conversation_state.length; i++) {
+		
+		if (DATA.conversation_state[i].conversation_state.event.length > conversationLength) {
+			
+			conversationLength = DATA.conversation_state[i].conversation_state.event.length;
+			conversationNumber = i;
+			
+		}
+		
+	}
+	
+	var CONVERSATION = DATA.conversation_state[conversationNumber];
+	var MESSAGELIST = CONVERSATION.conversation_state.event;
+	var PARTICIPANTS = createParticipantMap(CONVERSATION);
+
+	// throw away all of google's information about our diets and sex lives
+	// cuts the size of the json file by like 7x
+	var MESSAGES = [];
+	for (var i = 0; i < MESSAGELIST.length; i++) {
+		
+		MESSAGES.push(getMessageData(i));
+		
+	}
+
+	localStorage.MESSAGES = JSON.stringify(MESSAGES);
+	
+}
+
+else {
+	
+	MESSAGES = JSON.parse(localStorage.MESSAGES);
+	
+}
 
 // correlate the IDs with the names
 function createParticipantMap(conversation) {
@@ -21,17 +56,9 @@ function createParticipantMap(conversation) {
 }
 
 // pull message data out of the huge json swamp
-function getMessage(index) {
-	
-	var message = MESSAGELIST[index];
-	return message;
-	
-}
-
-// metawrapper
 function getMessageData(index) {
 	
-	return createEasyMessage(getMessage(index));
+	return createEasyMessage(MESSAGELIST[index]);
 	
 }
 
@@ -85,11 +112,6 @@ function createEasyMessage(message) {
 	easyMessage.sender = PARTICIPANTS[message.sender_id.chat_id];
 	// google's timestamp format doesn't play nice with Date's constructor
 	easyMessage.time = parseInt(message.timestamp.substring(0, message.timestamp.length - 3));
-	easyMessage.toString = function() {
-		
-		return this.sender + ": " + this.text + "<br/>" + new Date(this.time);
-		
-	};
 	
 	return easyMessage
 }
