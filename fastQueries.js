@@ -1,7 +1,6 @@
-// these work off of Messages.js instead of Hangouts.js
-// Messages.js basically throws away a lot of the useless data from the original json
-
-// we rebuilt them... better, faster, stronger
+// not sure this code needs to wait until a file is selected to be run
+// also i'm pretty sure inline comments break the queries,
+// so don't put those inside queries. use /* */ instead.
 
 // inclusive, exclusive
 function randInt(min, max) {
@@ -14,7 +13,63 @@ function toString(message) {
 	
 }
 
-function showRandomMessage() {
+// this is where the queries are stored.
+QUERIES = {};
+
+// pull saved queries from localStorage
+for (var query in localStorage) {
+	
+	QUERIES[query] = eval("(function() {" + localStorage[query] + "})");
+	
+}
+
+// here are the default queries
+
+QUERIES["Make A New Query"] = function() {
+	
+	var textArea = document.getElementById("text");
+	
+	var titleField = document.createElement("input");
+	titleField.type = "text";
+	titleField.style.border = "solid 1px";
+	titleField.id = "titleField";
+	
+	var codeField = document.createElement("textarea");
+	codeField.rows = 50;
+	codeField.cols = 80;
+	codeField.style.border = "solid 1px";
+	codeField.id = "codeField";
+	
+	var submit = document.createElement("button");
+	submit.type = "button";
+	submit.onclick = function() {
+		
+		var functionString = "(function() {" + codeField.value + "})";
+		QUERIES[titleField.value] = eval(functionString);
+		
+		localStorage[titleField.value] = codeField.value;
+		
+		addQueryToSidebar(titleField.value);
+		
+		titleField.value = "";
+		codeField.value = "";
+		
+	};
+	submit.innerHTML = "Submit";
+	submit.id = "submit";
+	
+	textArea.innerHTML = "";
+	textArea.appendChild(titleField);
+	textArea.appendChild(document.createElement("br"));
+	textArea.appendChild(document.createElement("br"));
+	textArea.appendChild(codeField);
+	textArea.appendChild(document.createElement("br"));
+	textArea.appendChild(document.createElement("br"));
+	textArea.appendChild(submit);
+	
+}
+
+QUERIES["showRandomMessage"] = function() {
 	
 	var randomMessage = MESSAGES[randInt(0, MESSAGES.length)];
 	document.getElementById("text").innerHTML = "";
@@ -22,16 +77,34 @@ function showRandomMessage() {
 	
 }
 
-// writing html in javascript gives me cancer
-function whoseLineIsItAnyway() {
+// a slightly less cancerous implementation than the previous one
+QUERIES["whoseLineIsItAnyway"] = function() {
 	
 	var randomMessage = MESSAGES[randInt(0, MESSAGES.length)];
-	// will run forever if nobody has ever sent a message longer than 4 characters
-	// in which case why are you even using this program
+	/* will run forever if nobody has ever sent a message longer than 4 characters
+	   in which case why are you even using this program */
 	while (randomMessage.text.length < 4) {randomMessage = MESSAGES[randInt(0, MESSAGES.length)];}
-	var button = "<br/><button type=\"button\" onclick=\"showHidden()\">Reveal Answer</button>";
-	document.getElementById("text").innerHTML = "";
-	document.getElementById("text").innerHTML += "<span id=\"hidden\" style=\"display:none;\">" + randomMessage.sender + ": </span>" + randomMessage.text + button +  "<br/><br/>";
+	
+	var button = document.createElement('button');
+	button.type = "button";
+	button.onclick = showHidden;
+	button.innerHTML = "Reveal Answer";
+	
+	var hiddenText = document.createElement('span');
+	hiddenText.id = "hidden";
+	hiddenText.style.display = "none";
+	hiddenText.innerHTML = randomMessage.sender + ": ";
+	
+	var messageText = document.createTextNode(randomMessage.text);
+	
+	var textElement = document.getElementById("text");
+	textElement.innerHTML = "";
+	textElement.appendChild(hiddenText);
+	textElement.appendChild(messageText);
+	textElement.appendChild(document.createElement('br'));
+	textElement.appendChild(button);
+	textElement.appendChild(document.createElement('br'));
+	textElement.appendChild(document.createElement('br'));
 	
 }
 
@@ -42,7 +115,7 @@ function showHidden() {
 }
 
 // not really very useful
-function longest100() {
+QUERIES["longest100"] = function() {
 	
 	MESSAGES.sort(function(a, b) {return (b.text.length - a.text.length);});
 	
@@ -55,7 +128,7 @@ function longest100() {
 	
 }
 
-function whoTalksMost() {
+QUERIES["whoTalksMost"] = function() {
 	
 	var names = {};
 	
@@ -76,7 +149,7 @@ function whoTalksMost() {
 	
 }
 
-function averageMessageLength() {
+QUERIES["averageMessageLength"] = function() {
 	
 	var names = {};
 	
@@ -133,7 +206,7 @@ function buildProfiles() {
 }
 
 // this is pretty ugly
-function commentsByUser() {
+QUERIES["commentsByUser"] = function() {
 	
 	if (PROFILES[MESSAGES[0].sender] === undefined) {buildProfiles();}
 	
@@ -158,5 +231,26 @@ function showComments(name) {
 	
 	document.getElementById("text").innerHTML = "";
 	document.getElementById("text").innerHTML = userComments;
+	
+}
+
+// guess what this does?
+function addQueryToSidebar(query) {
+	
+	var sidebar = document.getElementById("sidebar");
+	var link = document.createElement("a");
+	link.text = query;
+	link.href = "javascript:;";
+	link.onclick = QUERIES[query];
+	sidebar.appendChild(link);
+	sidebar.appendChild(document.createElement('br'));
+	sidebar.appendChild(document.createElement('br'));
+	
+}
+
+// create links for all of the queries
+for (var query in QUERIES) {
+	
+	addQueryToSidebar(query);
 	
 }

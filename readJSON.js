@@ -28,8 +28,9 @@ if (localStorage.MESSAGES === undefined) {
 		MESSAGES.push(getMessageData(i));
 		
 	}
-
-	localStorage.MESSAGES = JSON.stringify(MESSAGES);
+	
+	// not useful right now, since the chat files are too big
+	// localStorage.MESSAGES = JSON.stringify(MESSAGES);
 	
 }
 

@@ -1,7 +1,7 @@
 // begin throwing away google's secrets if that hasn't been done already
 window.onload = function() {
 	
-	if (localStorage.MESSAGES === undefined) {
+	if (localStorage.MESSAGES === undefined) { // this is always true atm
 		
 		var fileForm = document.getElementById("file");
 		fileForm.onchange = function() {
