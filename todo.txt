@@ -1,6 +1,8 @@
 improvements
+	try to switch everything to creating elements rather than using innerhtml?
+	i think sometimes the code is loading up before the file is finished being read
 	fix the css so that the sidebar is always as tall as the whole page
-	disable links until a file is selected
+	load fastQueries before file is selected maybe?
 	validate that it's a json file?
 	allow user to choose which conversation the data comes from, rather than defaulting to the longest one
 	add the ability to store larger message lists

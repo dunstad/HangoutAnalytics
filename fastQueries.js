@@ -182,6 +182,7 @@ QUERIES["averageMessageLength"] = function() {
 }
 
 var PROFILES = {}; // global because otherwise showComments won't be able to see it by the time it gets called
+buildProfiles(); // initialized here so that this is available to the queries whether or not commentsByUser gets clicked
 
 function buildProfiles() {
 		
