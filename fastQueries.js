@@ -1,31 +1,11 @@
-// not sure this code needs to wait until a file is selected to be run
-// also i'm pretty sure inline comments break the queries,
+// i'm pretty sure inline comments break the queries,
 // so don't put those inside queries. use /* */ instead.
-
-// inclusive, exclusive
-function randInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-
-function toString(message) {		
-	
-	return message.sender + ": " + message.text + "<br/>" + new Date(message.time);
-	
-}
 
 // this is where the queries are stored.
 QUERIES = {};
 
-// pull saved queries from localStorage
-for (var query in localStorage) {
-	
-	QUERIES[query] = eval("(function() {" + localStorage[query] + "})");
-	
-}
-
 // here are the default queries
-
-QUERIES["Make A New Query"] = function() {
+QUERIES["Make A New Query"] = function(e, title, code) {
 	
 	var textArea = document.getElementById("text");
 	
@@ -33,26 +13,35 @@ QUERIES["Make A New Query"] = function() {
 	titleField.type = "text";
 	titleField.style.border = "solid 1px";
 	titleField.id = "titleField";
+	if (title) {titleField.value = title;}
 	
 	var codeField = document.createElement("textarea");
 	codeField.rows = 50;
 	codeField.cols = 80;
 	codeField.style.border = "solid 1px";
 	codeField.id = "codeField";
+	if (code) {codeField.value = code;}
 	
 	var submit = document.createElement("button");
 	submit.type = "button";
 	submit.onclick = function() {
+			
+		if (document.getElementById(titleField.value)) {alert("There's already a query by this name.");}
+		else if (titleField.value === "") {alert("Give your query a name!");}
 		
-		var functionString = "(function() {" + codeField.value + "})";
-		QUERIES[titleField.value] = eval(functionString);
-		
-		localStorage[titleField.value] = codeField.value;
-		
-		addQueryToSidebar(titleField.value);
-		
-		titleField.value = "";
-		codeField.value = "";
+		else {
+			
+			var functionString = "(function() {" + myCodeMirror.getValue() + "})";
+			QUERIES[titleField.value] = eval(functionString);
+			
+			localStorage[titleField.value] = myCodeMirror.getValue();
+			
+			addQueryToSidebar(titleField.value);
+			
+			titleField.value = "";
+			myCodeMirror.getDoc().setValue("");
+			
+		}
 		
 	};
 	submit.innerHTML = "Submit";
@@ -66,6 +55,9 @@ QUERIES["Make A New Query"] = function() {
 	textArea.appendChild(document.createElement("br"));
 	textArea.appendChild(document.createElement("br"));
 	textArea.appendChild(submit);
+	
+	// reducing the size of the penises the editor sucks
+	var myCodeMirror = CodeMirror.fromTextArea(codeField, {"lineNumbers": true});
 	
 }
 
@@ -181,31 +173,6 @@ QUERIES["averageMessageLength"] = function() {
 	
 }
 
-var PROFILES = {}; // global because otherwise showComments won't be able to see it by the time it gets called
-buildProfiles(); // initialized here so that this is available to the queries whether or not commentsByUser gets clicked
-
-function buildProfiles() {
-		
-	// set up storage for comments by user
-	for (var i = 0; i < MESSAGES.length; i++) {
-		
-		if (PROFILES[MESSAGES[i].sender] === undefined) {
-			
-			PROFILES[MESSAGES[i].sender] = [];
-			
-		}
-		
-	}
-	
-	for (var i = 0; i < MESSAGES.length; i++) {
-		
-		var msg = MESSAGES[i];
-		PROFILES[msg.sender].push(msg);
-		
-	}
-	
-}
-
 // this is pretty ugly
 QUERIES["commentsByUser"] = function() {
 	
@@ -239,13 +206,66 @@ function showComments(name) {
 function addQueryToSidebar(query) {
 	
 	var sidebar = document.getElementById("sidebar");
+	
+	// create query link
 	var link = document.createElement("a");
 	link.text = query;
 	link.href = "javascript:;";
 	link.onclick = QUERIES[query];
-	sidebar.appendChild(link);
-	sidebar.appendChild(document.createElement('br'));
-	sidebar.appendChild(document.createElement('br'));
+	
+	// create edit button
+	var editButton = document.createElement("img");
+	editButton.src = "edit.png";
+	editButton.alt = "edit";
+	editButton.width = 15;
+	editButton.height = 15;
+	editButton.style.display = "inline";
+	editButton.style.padding = "0px 0px 0px 10px";
+	editButton.query = query;
+	editButton.onclick = function () {
+	
+		QUERIES["Make A New Query"](undefined, this.query, localStorage[this.query]);
+		
+	}
+	
+	// create delete button
+	var deleteButton = document.createElement("img");
+	deleteButton.src = "delete.png";
+	deleteButton.alt = "delete";
+	deleteButton.width = 15;
+	deleteButton.height = 15;
+	deleteButton.style.display = "inline";
+	deleteButton.style.padding = "0px 0px 0px 10px";
+	deleteButton.query = query;
+	deleteButton.onclick = function () {
+		
+		if (confirm("Are you sure you want to delete " + query + "?")) {
+			
+			delete QUERIES[this.query];
+			delete localStorage[this.query];
+			document.getElementById("sidebar").removeChild(document.getElementById(this.query));
+			
+		}
+		
+	}
+	
+	var containerSpan = document.createElement("span");
+	containerSpan.id = query;
+	
+	containerSpan.appendChild(link);
+	containerSpan.appendChild(editButton);
+	containerSpan.appendChild(deleteButton);
+	containerSpan.appendChild(document.createElement("br"));
+	containerSpan.appendChild(document.createElement("br"));
+	
+	sidebar.appendChild(containerSpan);
+	
+}
+
+// pull saved queries from localStorage
+for (var query in localStorage) {
+	
+	QUERIES[query] = eval("(function(e) {" + localStorage[query] + "})");
 	
 }
 

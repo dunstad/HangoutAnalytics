@@ -29,14 +29,47 @@ if (localStorage.MESSAGES === undefined) {
 		
 	}
 	
-	// not useful right now, since the chat files are too big
-	// localStorage.MESSAGES = JSON.stringify(MESSAGES);
-	
-}
+	// create PROFILES, for convenience
+	var PROFILES = {}; // global because otherwise showComments won't be able to see it by the time it gets called
+	buildProfiles(); // initialized here so that this is available to the queries whether or not commentsByUser gets clicked
 
-else {
+	function buildProfiles() {
+			
+		// set up storage for comments by user
+		for (var i = 0; i < MESSAGES.length; i++) {
+			
+			if (PROFILES[MESSAGES[i].sender] === undefined) {
+				
+				PROFILES[MESSAGES[i].sender] = [];
+				
+			}
+			
+		}
+		
+		for (var i = 0; i < MESSAGES.length; i++) {
+			
+			var msg = MESSAGES[i];
+			PROFILES[msg.sender].push(msg);
+			
+		}
+		
+	}
 	
-	MESSAGES = JSON.parse(localStorage.MESSAGES);
+	// inclusive, exclusive
+	function randInt(min, max) {
+		
+		return Math.floor(Math.random() * (max - min)) + min;
+		
+	}
+	
+	// should be rewritten to return a node rather than raw html
+	function toString(message) {		
+		
+		return message.sender + ": " + message.text + "<br/>" + new Date(message.time);
+		
+	}
+	
+	
 	
 }
 

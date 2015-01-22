@@ -1,36 +1,23 @@
 // begin throwing away google's secrets if that hasn't been done already
 window.onload = function() {
 	
-	if (localStorage.MESSAGES === undefined) { // this is always true atm
+	if (localStorage.MESSAGES === undefined) { // this is always true, localStorage is too small
+		
+		// hide the guide link for visual effect
+		document.getElementById("guide").style.visibility = "hidden";
 		
 		var fileForm = document.getElementById("file");
 		fileForm.onchange = function() {
 			
 			var file = fileForm.files[0];
 			var reader = new FileReader();
-			reader.onload = loadJavascript;
+			reader.onloadend = loadJavascript;
 			reader.readAsText(file);
-			
 			
 		}
 		
-	}
-	
-	else {
-		
-		// just copied this from below. yes, i feel dirty.
-		document.head.appendChild(createScriptElement("readJSON.js"));
-		document.head.appendChild(createScriptElement("fastQueries.js"));
-		
-		// hope you didn't want to change which file you have loaded in
-		var fileForm = document.getElementById("file")
-		var sidebar = fileForm.parentNode;
-		
-		// i'm going to programmer hell
-		sidebar.removeChild(sidebar.childNodes[0]);
-		sidebar.removeChild(sidebar.childNodes[0]);
-		sidebar.removeChild(sidebar.childNodes[0]);
-		sidebar.removeChild(sidebar.childNodes[0]);
+		// for when you get here with the back button and your file's still selected
+		if (fileForm.value !== "") {fileForm.onchange();}
 		
 	}
 	
@@ -48,7 +35,9 @@ function createScriptElement(name) {
 function loadJavascript(e) {
 	
 	DATA = JSON.parse(e.target.result);
+	
 	document.head.appendChild(createScriptElement("readJSON.js"));
 	document.head.appendChild(createScriptElement("fastQueries.js"));
+	document.getElementById("guide").style.visibility = "visible"; // ta da!
 	
 }
