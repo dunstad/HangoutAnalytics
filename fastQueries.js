@@ -61,6 +61,80 @@ QUERIES["Make A New Query"] = function(e, title, code) {
 	
 }
 
+QUERIES["Word Count"] = function() {
+	
+	var searchForm = document.createElement('input');
+	searchForm.type = "text";
+	searchForm.style.border = "solid 1px"
+	searchForm.id = "searchForm";
+
+	var submit = document.createElement("button");
+	submit.type = "button";
+	submit.onclick = function() {
+
+	  /* delete old results, if present */
+	  if (document.getElementById("results")) {
+		
+		document.getElementById("text").removeChild(document.getElementById("results"));
+		
+	  }
+	  
+	  var searchMessages = [];
+
+	  for (var i = 0; i < MESSAGES.length; i++) {
+
+		if (MESSAGES[i].text.toLowerCase().indexOf(searchForm.value) !== -1) {
+
+		  searchMessages.push(MESSAGES[i]);
+
+		}
+
+	  }
+      
+	  console.log(searchMessages);
+	  
+	  var people = {};
+	  for (name in PROFILES) {
+
+		people[name] = 0;
+
+	  }
+	  
+	  console.log(people);
+
+	  for (var i = 0; i < searchMessages.length; i++) {
+		
+		people[searchMessages[i].sender]++;
+
+	  }
+
+	  var messageHTML = "";
+	  for (var name in people) {
+
+		messageHTML += name + ": " + people[name] + "<br><br>";
+
+	  }
+	  
+	  var spanContainer = document.createElement("span");
+	  spanContainer.innerHTML = messageHTML;
+	  spanContainer.id = "results";
+
+	  document.getElementById("text").appendChild(spanContainer);
+	  
+	  searchForm.value = "";
+
+	};
+	submit.innerHTML = "Submit";
+	submit.id = "submit";
+
+
+	document.getElementById("text").innerHTML = "";
+	document.getElementById("text").appendChild(searchForm);
+	document.getElementById("text").appendChild(submit);
+	document.getElementById("text").appendChild(document.createElement("br"));
+
+}
+
 QUERIES["showRandomMessage"] = function() {
 	
 	var randomMessage = MESSAGES[randInt(0, MESSAGES.length)];
