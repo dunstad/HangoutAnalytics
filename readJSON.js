@@ -115,6 +115,13 @@ function createEasyMessage(message) {
 		
 	}
 	
+	// and another one
+	else if (message.event_type == "REMOVE_USER") {
+			
+		easyMessage.text = "User Removed";
+		
+	}
+	
 	// more edge cases
 	else if (message.hangout_event && message.hangout_event.event_type == "START_HANGOUT") {
 		
@@ -129,7 +136,7 @@ function createEasyMessage(message) {
 		
 	}
 	
-	// fuck stop it already
+	// please stop already
 	else if (message.chat_message && message.chat_message.message_content.attachment) {
 		
 		easyMessage.text = "Attachment";
