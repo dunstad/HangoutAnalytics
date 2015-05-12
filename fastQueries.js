@@ -83,7 +83,7 @@ QUERIES["Word Count"] = function() {
 
 	  for (var i = 0; i < MESSAGES.length; i++) {
 
-		if (MESSAGES[i].text.toLowerCase().indexOf(searchForm.value) !== -1) {
+		if (MESSAGES[i].text.toLowerCase().indexOf(searchForm.value.toLowerCase()) !== -1) {
 
 		  searchMessages.push(MESSAGES[i]);
 
