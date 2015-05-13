@@ -7,10 +7,10 @@ QUERIES = {};
 // here are the default queries
 QUERIES["Make A New Query"] = function(e, title, code) {
 	
-	var textArea = document.getElementById("text");
+	var textArea = document.getElementById("content");
 	
 	var titleField = document.createElement("input");
-	titleField.type = "text";
+	titleField.type = "content";
 	titleField.style.border = "solid 1px";
 	titleField.id = "titleField";
 	if (title) {titleField.value = title;}
@@ -64,7 +64,7 @@ QUERIES["Make A New Query"] = function(e, title, code) {
 QUERIES["Word Count"] = function() {
 	
 	var searchForm = document.createElement('input');
-	searchForm.type = "text";
+	searchForm.type = "content";
 	searchForm.style.border = "solid 1px"
 	searchForm.id = "searchForm";
 
@@ -75,7 +75,7 @@ QUERIES["Word Count"] = function() {
 	  /* delete old results, if present */
 	  if (document.getElementById("results")) {
 		
-		document.getElementById("text").removeChild(document.getElementById("results"));
+		document.getElementById("content").removeChild(document.getElementById("results"));
 		
 	  }
 	  
@@ -119,7 +119,7 @@ QUERIES["Word Count"] = function() {
 	  spanContainer.innerHTML = messageHTML;
 	  spanContainer.id = "results";
 
-	  document.getElementById("text").appendChild(spanContainer);
+	  document.getElementById("content").appendChild(spanContainer);
 	  
 	  searchForm.value = "";
 
@@ -128,18 +128,18 @@ QUERIES["Word Count"] = function() {
 	submit.id = "submit";
 
 
-	document.getElementById("text").innerHTML = "";
-	document.getElementById("text").appendChild(searchForm);
-	document.getElementById("text").appendChild(submit);
-	document.getElementById("text").appendChild(document.createElement("br"));
+	document.getElementById("content").innerHTML = "";
+	document.getElementById("content").appendChild(searchForm);
+	document.getElementById("content").appendChild(submit);
+	document.getElementById("content").appendChild(document.createElement("br"));
 
 }
 
 QUERIES["showRandomMessage"] = function() {
 	
 	var randomMessage = MESSAGES[randInt(0, MESSAGES.length)];
-	document.getElementById("text").innerHTML = "";
-	document.getElementById("text").innerHTML = toString(randomMessage) + "<br/><br/>";
+	document.getElementById("content").innerHTML = "";
+	document.getElementById("content").innerHTML = toString(randomMessage) + "<br/><br/>";
 	
 }
 
@@ -163,7 +163,7 @@ QUERIES["whoseLineIsItAnyway"] = function() {
 	
 	var messageText = document.createTextNode(randomMessage.text);
 	
-	var textElement = document.getElementById("text");
+	var textElement = document.getElementById("content");
 	textElement.innerHTML = "";
 	textElement.appendChild(hiddenText);
 	textElement.appendChild(messageText);
@@ -185,10 +185,10 @@ QUERIES["longest100"] = function() {
 	
 	MESSAGES.sort(function(a, b) {return (b.text.length - a.text.length);});
 	
-	document.getElementById("text").innerHTML = "";
+	document.getElementById("content").innerHTML = "";
 	for (var i = 0; i < 100; i++) {
 		
-		document.getElementById("text").innerHTML += toString(MESSAGES[i]) + "<br/><br/>";
+		document.getElementById("content").innerHTML += toString(MESSAGES[i]) + "<br/><br/>";
 		
 	}
 	
@@ -206,10 +206,10 @@ QUERIES["whoTalksMost"] = function() {
 		
 	}
 	
-	document.getElementById("text").innerHTML = "";
+	document.getElementById("content").innerHTML = "";
 	for (name in names) {
 		
-		document.getElementById("text").innerHTML += name + ": " + names[name] + ", " + (Math.round(names[name] / MESSAGES.length * 10000) / 100) + "%" + "<br/><br/>";
+		document.getElementById("content").innerHTML += name + ": " + names[name] + ", " + (Math.round(names[name] / MESSAGES.length * 10000) / 100) + "%" + "<br/><br/>";
 		
 	}
 	
@@ -238,10 +238,10 @@ QUERIES["averageMessageLength"] = function() {
 		
 	}
 	
-	document.getElementById("text").innerHTML = "";
+	document.getElementById("content").innerHTML = "";
 	for (name in names) {
 		
-		document.getElementById("text").innerHTML += name + ": " + (names[name]["length"] / names[name]["number"]) + "<br/><br/>";
+		document.getElementById("content").innerHTML += name + ": " + (names[name]["length"] / names[name]["number"]) + "<br/><br/>";
 		
 	}
 	
@@ -252,10 +252,10 @@ QUERIES["commentsByUser"] = function() {
 	
 	if (PROFILES[MESSAGES[0].sender] === undefined) {buildProfiles();}
 	
-	document.getElementById("text").innerHTML = "";
+	document.getElementById("content").innerHTML = "";
 	for (name in PROFILES) {
 		
-		document.getElementById("text").innerHTML += "<a href=\"javascript:showComments('" + name + "');\">" + name + "</a><br/><br/>"
+		document.getElementById("content").innerHTML += "<a href=\"javascript:showComments('" + name + "');\">" + name + "</a><br/><br/>"
 		
 	}
 	
@@ -271,15 +271,15 @@ function showComments(name) {
 		
 	}
 	
-	document.getElementById("text").innerHTML = "";
-	document.getElementById("text").innerHTML = userComments;
+	document.getElementById("content").innerHTML = "";
+	document.getElementById("content").innerHTML = userComments;
 	
 }
 
 // guess what this does?
 function addQueryToSidebar(query) {
 	
-	var sidebar = document.getElementById("sidebar");
+	var sidebar = document.getElementById("navigation");
 	
 	// create query link
 	var link = document.createElement("a");
@@ -317,7 +317,7 @@ function addQueryToSidebar(query) {
 			
 			delete QUERIES[this.query];
 			delete localStorage[this.query];
-			document.getElementById("sidebar").removeChild(document.getElementById(this.query));
+			document.getElementById("navigation").removeChild(document.getElementById(this.query));
 			
 		}
 		
