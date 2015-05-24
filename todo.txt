@@ -2,11 +2,7 @@ improvements
 	remove delete buttons from default queries
 	make editing work on default queries
 	allow overwriting of queries with prompt
-	fix the css so that the sidebar is always as tall as the whole page (and no taller, scrollbars suck)
-	try to switch everything to creating elements rather than using innerhtml?
-	allow user to choose which conversation the data comes from, rather than defaulting to the longest one
-	add the ability to store larger message lists in something like localStorage
-	validate that it's a json file
+	allow user to choose which conversation the data comes from?
 
 queries
 	humor stats
@@ -15,4 +11,3 @@ queries
 	score tracking for game with cookies
 	social graph stats (who says whose name and how often)
 	get links
-	your mom jokes

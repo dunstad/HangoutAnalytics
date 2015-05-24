@@ -1,22 +1,16 @@
 // reading the source code? what a nerd
 
-// use the data from the longest conversation
-var conversationNumber = 0;
-var conversationLength = 0;
-for (var i = 0; i < DATA.conversation_state.length; i++) {
+var CONVERSATIONS = DATA.conversation_state;
 
-	if (DATA.conversation_state[i].conversation_state.event.length > conversationLength) {
+var MESSAGELIST = [];
+for (var i = 0; i < CONVERSATIONS.length; i++) {
 
-		conversationLength = DATA.conversation_state[i].conversation_state.event.length;
-		conversationNumber = i;
-
-	}
+	MESSAGELIST = MESSAGELIST.concat(CONVERSATIONS[i].conversation_state.event);
 
 }
 
-var CONVERSATION = DATA.conversation_state[conversationNumber];
-var MESSAGELIST = CONVERSATION.conversation_state.event;
-var PARTICIPANTS = createParticipantMap(CONVERSATION);
+
+var PARTICIPANTS = createParticipantMap(CONVERSATIONS);
 
 // throw away all of google's information about our diets and sex lives
 // cuts the size of the json file by like 7x
@@ -26,6 +20,9 @@ for (var i = 0; i < MESSAGELIST.length; i++) {
 	MESSAGES.push(getMessageData(i));
 
 }
+
+// add sorting by timestamp
+MESSAGES.sort(function(a, b){return a.time - b.time;});
 
 // the messages are seriously distracting while trying to code
 if (debug) {
@@ -120,14 +117,19 @@ function removeChildren(node) {
 }
 
 // correlate the IDs with the names
-function createParticipantMap(conversation) {
+function createParticipantMap(conversations) {
 
 	var participants = {};
-	var participantList = conversation.conversation_state.conversation.participant_data;
 
-	for (var i = 0; i < participantList.length; i++) {
+	for (var i = 0; i < conversations.length; i++) {
 
-		participants[participantList[i].id.chat_id] = participantList[i].fallback_name;
+		var participantList = conversations[i].conversation_state.conversation.participant_data;
+
+		for (var j = 0; j < participantList.length; j++) {
+
+			participants[participantList[j].id.chat_id] = participantList[j].fallback_name;
+
+		}
 
 	}
 
