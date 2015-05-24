@@ -2,7 +2,7 @@
 window.onload = function() {
 
 	// i'm definitely going to forget to toggle this
-	debug = true;
+	debug = false;
 
 	if (localStorage.MESSAGES === undefined) { // this is always true, localStorage is too small
 
