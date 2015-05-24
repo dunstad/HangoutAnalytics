@@ -4,25 +4,21 @@ window.onload = function() {
 	// i'm definitely going to forget to toggle this
 	debug = false;
 
-	if (localStorage.MESSAGES === undefined) { // this is always true, localStorage is too small
+	// hide the guide link for visual effect
+	document.getElementById("guide").style.visibility = "hidden";
 
-		// hide the guide link for visual effect
-		document.getElementById("guide").style.visibility = "hidden";
+	var fileForm = document.getElementById("file");
+	fileForm.onchange = function() {
 
-		var fileForm = document.getElementById("file");
-		fileForm.onchange = function() {
+		var file = fileForm.files[0];
+		var reader = new FileReader();
+		reader.onloadend = loadJavascript;
+		reader.readAsText(file);
 
-			var file = fileForm.files[0];
-			var reader = new FileReader();
-			reader.onloadend = loadJavascript;
-			reader.readAsText(file);
+	};
 
-		};
-
-		// for when you get here with the back button and your file's still selected
-		if (fileForm.value !== "") {fileForm.onchange();}
-
-	}
+	// for when you get here with the back button and your file's still selected
+	if (fileForm.value !== "") {fileForm.onchange();}
 
 };
 
