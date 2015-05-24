@@ -5,7 +5,7 @@ margin: 0px;
 padding: 0px;
 background-color: #20242a;
 color: #9CA4B4;
-/*font-size: 13;*/
+text-align: left;
 }
 
 html, body
@@ -18,33 +18,30 @@ width: 100%;
 {
 float: left;
 border-right: 1px solid black;
-
-display: flex;
-flex-direction: column;
-align-items: stretch;
+width:250px;
 }
 
 #content
 {
-background-color: #272B33;
 /* this prevents horizontal scrollbars from popping up */
 word-wrap: break-word;
 }
 
-.flexContainer
+.flexHorizontal
 {
+/* keeps the edit and delete buttons on the same line as their query */
 display: flex;
-flex-direction: row;
+/* centers the edit and delete buttons with their query */
 align-items: center;
 }
 
 button
 {
+width: 100%;
 height: 27px;
 margin: 2px 0px 2px 0px;
 padding: 6px;
-display: flex;
-flex: 1;
+word-wrap: break-word;
 }
 
 .clickable
@@ -61,11 +58,11 @@ color: #C8D5EE;
 
 img
 {
-width: 27px;
-height: 27px;
-background-size: 100%;
+min-width: 27px;
+min-height: 27px;
+background-size: 20px;
 background-repeat: no-repeat;
-background-position: bottom right;
+background-position: center;
 margin:0px;
 }
 
@@ -101,4 +98,32 @@ padding-left: 10px;
 padding-right: 10px;
 height: 100%;
 overflow-y: auto;
+}
+
+.message
+{
+background-color: #272B33;
+padding: 5px;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+
+.sender
+{
+font-weight: bold;
+background-color:inherit;
+padding: inherit;
+}
+
+.content
+{
+background-color:inherit;
+padding: inherit;
+}
+
+.date
+{
+font-size: 50%;
+background-color:inherit;
+padding: inherit;
 }

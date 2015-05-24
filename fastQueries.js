@@ -44,10 +44,10 @@ QUERIES["Make A New Query"] = function(e, title, code) {
 		}
 
 	};
-	submit.innerHTML = "Submit";
+	submit.textContent = "Submit";
 	submit.id = "submit";
 
-	textArea.innerHTML = "";
+	textArea.textContent = "";
 	textArea.appendChild(titleField);
 	textArea.appendChild(document.createElement("br"));
 	textArea.appendChild(document.createElement("br"));
@@ -108,27 +108,24 @@ QUERIES["Word Count"] = function() {
 
 	  }
 
-	  var messageHTML = "";
+	  var spanContainer = document.createElement("span");
+	  spanContainer.id = "results";
 	  for (var name in people) {
 
-		messageHTML += name + ": " + people[name] + "<br><br>";
+			spanContainer.appendChild(document.createTextNode(name + ": " + people[name]));
 
 	  }
-
-	  var spanContainer = document.createElement("span");
-	  spanContainer.innerHTML = messageHTML;
-	  spanContainer.id = "results";
 
 	  document.getElementById("content").appendChild(spanContainer);
 
 	  searchForm.value = "";
 
 	};
-	submit.innerHTML = "Submit";
+	submit.textContent = "Submit";
 	submit.id = "submit";
 
 
-	document.getElementById("content").innerHTML = "";
+	removeChildren(document.getElementById("content"));
 	document.getElementById("content").appendChild(searchForm);
 	document.getElementById("content").appendChild(submit);
 	document.getElementById("content").appendChild(document.createElement("br"));
@@ -138,8 +135,8 @@ QUERIES["Word Count"] = function() {
 QUERIES["showRandomMessage"] = function() {
 
 	var randomMessage = MESSAGES[randInt(0, MESSAGES.length)];
-	document.getElementById("content").innerHTML = "";
-	document.getElementById("content").innerHTML = toString(randomMessage) + "<br/><br/>";
+	removeChildren(document.getElementById("content"));
+	document.getElementById("content").appendChild(toString(randomMessage));
 
 };
 
@@ -154,17 +151,17 @@ QUERIES["whoseLineIsItAnyway"] = function() {
 	var button = document.createElement('button');
 	button.type = "button";
 	button.onclick = showHidden;
-	button.innerHTML = "Reveal Answer";
+	button.textContent = "Reveal Answer";
 
 	var hiddenText = document.createElement('span');
 	hiddenText.id = "hidden";
 	hiddenText.style.display = "none";
-	hiddenText.innerHTML = randomMessage.sender + ": ";
+	hiddenText.textContent = randomMessage.sender + ": ";
 
 	var messageText = document.createTextNode(randomMessage.text);
 
 	var textElement = document.getElementById("content");
-	textElement.innerHTML = "";
+	textElement.textContent = "";
 	textElement.appendChild(hiddenText);
 	textElement.appendChild(messageText);
 	textElement.appendChild(document.createElement('br'));
@@ -185,10 +182,10 @@ QUERIES["longest100"] = function() {
 
 	MESSAGES.sort(function(a, b) {return (b.text.length - a.text.length);});
 
-	document.getElementById("content").innerHTML = "";
+	removeChildren(document.getElementById("content"));
 	for (var i = 0; i < 100; i++) {
 
-		document.getElementById("content").innerHTML += toString(MESSAGES[i]) + "<br/><br/>";
+		document.getElementById("content").appendChild(toString(MESSAGES[i]));
 
 	}
 
@@ -206,10 +203,12 @@ QUERIES["whoTalksMost"] = function() {
 
 	}
 
-	document.getElementById("content").innerHTML = "";
+	removeChildren(document.getElementById("content"));
 	for (var name in names) {
 
-		document.getElementById("content").innerHTML += name + ": " + names[name] + ", " + (Math.round(names[name] / MESSAGES.length * 10000) / 100) + "%" + "<br/><br/>";
+		var result = document.createTextNode(name + ": " + names[name] + ", " + (Math.round(names[name] / MESSAGES.length * 10000) / 100) + "%");
+
+		document.getElementById("content").appendChild(result);
 
 	}
 
@@ -238,10 +237,11 @@ QUERIES["averageMessageLength"] = function() {
 
 	}
 
-	document.getElementById("content").innerHTML = "";
+	removeChildren(document.getElementById("content"));
 	for (var name in names) {
 
-		document.getElementById("content").innerHTML += name + ": " + (names[name]["length"] / names[name]["number"]) + "<br/><br/>";
+		var result = document.createTextNode(name + ": " + (names[name]["length"] / names[name]["number"]));
+		document.getElementById("content").appendChild(result);
 
 	}
 
@@ -252,10 +252,15 @@ QUERIES["commentsByUser"] = function() {
 
 	if (PROFILES[MESSAGES[0].sender] === undefined) {buildProfiles();}
 
-	document.getElementById("content").innerHTML = "";
+	removeChildren(document.getElementById("content"));
 	for (var name in PROFILES) {
 
-		document.getElementById("content").innerHTML += "<a href=\"javascript:showComments('" + name + "');\">" + name + "</a><br/><br/>";
+		// "<a href=\"javascript:showComments('" + name + "');\">" + name + "</a>";
+		var result = document.createElement("a");
+		result.href = "javascript:showComments('" + name + "');"
+		result.textContent = name;
+
+		document.getElementById("content").appendChild(result);
 
 	}
 
@@ -264,15 +269,15 @@ QUERIES["commentsByUser"] = function() {
 // but hey it works... kinda
 function showComments(name) {
 
-	var userComments = "";
+	var userComments = document.createElement("div");
 	for (var i = 0; i < PROFILES[name].length; i++) {
 
-		userComments += toString(PROFILES[name][i]) + "<br/><br/>";
+		userComments.appendChild(toString(PROFILES[name][i]));
 
 	}
 
-	document.getElementById("content").innerHTML = "";
-	document.getElementById("content").innerHTML = userComments;
+	removeChildren(document.getElementById("content"));
+	document.getElementById("content").appendChild(userComments);
 
 }
 
@@ -322,7 +327,7 @@ function addQueryToSidebar(query) {
 
 	var containerSpan = document.createElement("span");
 	containerSpan.id = query;
-	containerSpan.className = "flexContainer";
+	containerSpan.className = "flexHorizontal";
 
 	containerSpan.appendChild(queryButton);
 	containerSpan.appendChild(editButton);

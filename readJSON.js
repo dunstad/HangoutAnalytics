@@ -83,13 +83,41 @@ function randInt(min, max) {
 
 }
 
-// should be rewritten to return a node rather than raw html
+// turns a message into DOM nodes
 function toString(message) {
 
-	return message.sender + ": " + message.text + "<br/>" + new Date(message.time);
+	var messageContainer = document.createElement("div");
+	messageContainer.className = "message";
+
+	var sender = document.createElement("div");
+	sender.className = "sender";
+	sender.textContent = message.sender;
+
+	var content = document.createElement("div");
+	content.className = "content";
+	content.textContent = message.text;
+
+	var date = document.createElement("div");
+	date.className = "date";
+	date.textContent = new Date(message.time);
+
+	messageContainer.appendChild(sender);
+	messageContainer.appendChild(content);
+	messageContainer.appendChild(date);
+
+	return messageContainer;
 
 }
 
+function removeChildren(node) {
+
+	while(node.firstChild) {
+
+		node.removeChild(node.firstChild);
+
+	}
+
+}
 
 // correlate the IDs with the names
 function createParticipantMap(conversation) {

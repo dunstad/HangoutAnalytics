@@ -1,19 +1,19 @@
 <html>
-	
+
 	<head>
-		
+
 		<title>Query Making Guide</title>
 		<link rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shCore.css" type="text/css"/>
 		<link rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css" type="text/css"/>
 		<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
 		<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script>
-		
+
 	</head>
-	
+
 	<body>
-		
+
 		<script type="text/javascript">SyntaxHighlighter.all()</script>
-		
+
 <h3>Query Making Guide</h3>
 
 So here are some things you'll need.<br><br>
@@ -23,7 +23,7 @@ They're stored as objects (associative arrays) with three properties: text, time
 <pre class="brush: js">/* messageText will be "what's up fagnuts" or something similar. */
 var messageText = MESSAGES[0].text;
 
-/* messageSender will be "Anthony Blount", or someone else's name. */
+/* messageSender will be "Alan Turing", or someone else's name. */
 var messageSender = MESSAGES[0].sender;
 
 /* A date in the form of miliseconds from the epoch.
@@ -34,7 +34,7 @@ An alternative way to access message data is through the PROFILES object/associa
 At the index of each name, it stores an array of all of that user's messages.<br>
 
 <pre class="brush: js">/* This is how to get a list of all messages I've sent. */
-var allOfAnthonysMessages = PROFILES["Anthony Blount"];
+var allOfAnthonysMessages = PROFILES["Alan Turing"];
 
 /* Extracting the text from one of my messages */
 var singleMessageText = allOfAnthonysMessages[0].text;</pre>
@@ -44,9 +44,9 @@ If I wanted to get all the keys from PROFILES, I would do it like this:
 <pre class="brush: js">/* Creating a list of everyone's names. */
 var listOfAllNames = [];
 for (var name in PROFILES) {
-	
+
 	listOfAllNames.push(name);
-	
+
 }</pre>
 
 Once you have a message, you can use a toString function I've provided to make it pretty:
@@ -67,88 +67,64 @@ var queryArea = document.getElementById("text");</pre>
 Here's an example query that modifies that section of the page.<br>
 This particular example will write out all messages containing links I've ever posted.<br>
 
-<pre class="brush: js">var allOfAnthonysMessages = PROFILES["Anthony Blount"];
+<pre class="brush: js">var allOfAnthonysMessages = PROFILES["Alan Turing"];
 var anthonysLinks = [];
 
 /* Separate the 'haves' from the 'have-nots' */
 for (var i = 0; i &lt; allOfAnthonysMessages.length; i++) {
-	
+
 	/* evaluates to true if it finds http:// in the message */
 	if (allOfAnthonysMessages[i].text.indexOf("http://") != -1) {
-		
+
 		anthonysLinks.push(allOfAnthonysMessages[i]);
-		
+
 	}
-	
+
 }
-
-/* A place to store our links before placing them into the document. */
-var linkHTML = "";
-
-/* Get the HTML of all the link messages, plus some space. */
-for (var i = 0; i &lt; anthonysLinks.length; i++) {
-	
-	linkHTML += toString(anthonysLinks[i]) + "&lt;br&gt;&lt;br&gt;";
-	
-}
-
 
 /* Empty the page of any prior content. */
-queryArea.innerHTML = "";
+removeChildren(queryArea);
 
-/* Commit the links to the document. */
-queryArea.innerHTML = linkHTML;</pre>
+/* Add the messages to the document. */
+for (var i = 0; i &lt; anthonysLinks.length; i++) {
 
+	queryArea.appendChild(toString(anthonysLinks[i]));
 
-<!--
-	/* How it should actually be done, not using innerHTML: */
-	var linkMessage = document.createTextNode(toString(anthonysLinks[i]));
-	queryArea.appendChild(linkMessage);
-	
-	/* Make sure there are line breaks between the links so it's readable */
-	queryArea.appendChild(document.createElement("br"));
-	queryArea.appendChild(document.createElement("br"));
--->
+}
 
+</pre>
 
 <!-- Here's all the code for the links query in one place:
 
 	var queryArea = document.getElementById("text");
-	var allOfAnthonysMessages = PROFILES["Anthony Blount"];
+	var allOfAnthonysMessages = PROFILES["Alan Turing"];
 	var anthonysLinks = [];
 
 	/* Separate the 'haves' from the 'have-nots' */
 	for (var i = 0; i < allOfAnthonysMessages.length; i++) {
-		
+
 		/* evaluates to true if it finds http:// in the message */
 		if (allOfAnthonysMessages[i].text.indexOf("http://") != -1) {
-			
+
 			anthonysLinks.push(allOfAnthonysMessages[i]);
-			
+
 		}
-		
+
 	}
-
-	/* A place to store our links before placing them into the document. */
-	var linkHTML = "";
-
-	/* Get the HTML of all the link messages. */
-	for (var i = 0; i < anthonysLinks.length; i++) {
-		
-		linkHTML += toString(anthonysLinks[i]) + "<br><br>";
-		
-	}
-
 
 	/* Empty the page of any prior content. */
-	queryArea.innerHTML = "";
+	removeChildren(queryArea);
 
-	/* Commit the links to the document. */
-	queryArea.innerHTML = linkHTML;
-	
+	/* Add the messages to the document. */
+	for (var i = 0; i &lt; anthonysLinks.length; i++) {
+
+		queryArea.appendChild(toString(anthonysLinks[i]));
+
+	}
+
 -->
-			
-		
+
+
 	</body>
-	
+
 </html>
