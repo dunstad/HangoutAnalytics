@@ -132,7 +132,7 @@ QUERIES["Word Count"] = function() {
 
 };
 
-QUERIES["showRandomMessage"] = function() {
+QUERIES["Random Message"] = function() {
 
 	var randomMessage = MESSAGES[randInt(0, MESSAGES.length)];
 	removeChildren(document.getElementById("content"));
@@ -140,45 +140,38 @@ QUERIES["showRandomMessage"] = function() {
 
 };
 
-// a slightly less cancerous implementation than the previous one
-QUERIES["whoseLineIsItAnyway"] = function() {
+// a slightly less terrible implementation than the previous one
+QUERIES["Whose Line Is It Anyway?"] = function() {
 
 	var randomMessage = MESSAGES[randInt(0, MESSAGES.length)];
 	/* will run forever if nobody has ever sent a message longer than 4 characters
 	   in which case why are you even using this program */
 	while (randomMessage.text.length < 4) {randomMessage = MESSAGES[randInt(0, MESSAGES.length)];}
 
-	var button = document.createElement('button');
-	button.type = "button";
+	// leave out the date
+	var message = createStyledMessage(randomMessage.sender, randomMessage.text);
+	message.firstChild.id = "hidden";
+	message.firstChild.style.visibility = "hidden";
+
+	var button = createStyledMessage(undefined, "Reveal Answer");
+	button.className += " clickable";
 	button.onclick = showHidden;
-	button.textContent = "Reveal Answer";
-
-	var hiddenText = document.createElement('span');
-	hiddenText.id = "hidden";
-	hiddenText.style.display = "none";
-	hiddenText.textContent = randomMessage.sender + ": ";
-
-	var messageText = document.createTextNode(randomMessage.text);
 
 	var textElement = document.getElementById("content");
-	textElement.textContent = "";
-	textElement.appendChild(hiddenText);
-	textElement.appendChild(messageText);
-	textElement.appendChild(document.createElement('br'));
+	removeChildren(textElement);
+	textElement.appendChild(message);
 	textElement.appendChild(button);
-	textElement.appendChild(document.createElement('br'));
-	textElement.appendChild(document.createElement('br'));
 
 };
 
 function showHidden() {
 
-	document.getElementById("hidden").style.display = "inline";
+	document.getElementById("hidden").style.visibility = "visible";
 
 }
 
 // not really very useful
-QUERIES["longest100"] = function() {
+QUERIES["Longest 100 Messages"] = function() {
 
 	MESSAGES.sort(function(a, b) {return (b.text.length - a.text.length);});
 
@@ -191,7 +184,7 @@ QUERIES["longest100"] = function() {
 
 };
 
-QUERIES["whoTalksMost"] = function() {
+QUERIES["Number of Messages"] = function() {
 
 	var names = {};
 
@@ -206,7 +199,8 @@ QUERIES["whoTalksMost"] = function() {
 	removeChildren(document.getElementById("content"));
 	for (var name in names) {
 
-		var result = document.createTextNode(name + ": " + names[name] + ", " + (Math.round(names[name] / MESSAGES.length * 10000) / 100) + "%");
+		var result = createStyledMessage(name, names[name] + " messages, " + (Math.round(names[name] / MESSAGES.length * 10000) / 100) + "% of total");
+		// var result = document.createTextNode(name + ": " + names[name] + ", " + (Math.round(names[name] / MESSAGES.length * 10000) / 100) + "%");
 
 		document.getElementById("content").appendChild(result);
 
@@ -214,7 +208,7 @@ QUERIES["whoTalksMost"] = function() {
 
 };
 
-QUERIES["averageMessageLength"] = function() {
+QUERIES["Average Message Length"] = function() {
 
 	var names = {};
 
@@ -240,33 +234,41 @@ QUERIES["averageMessageLength"] = function() {
 	removeChildren(document.getElementById("content"));
 	for (var name in names) {
 
-		var result = document.createTextNode(name + ": " + (names[name]["length"] / names[name]["number"]));
+		var result = createStyledMessage(name, Math.round((names[name]["length"] / names[name]["number"])) + " characters");
+
 		document.getElementById("content").appendChild(result);
 
 	}
 
 };
 
-// this is pretty ugly
-QUERIES["commentsByUser"] = function() {
+// list out names of chat participants and add an event handler
+QUERIES["Comments By User"] = function() {
 
 	if (PROFILES[MESSAGES[0].sender] === undefined) {buildProfiles();}
 
 	removeChildren(document.getElementById("content"));
 	for (var name in PROFILES) {
 
-		// "<a href=\"javascript:showComments('" + name + "');\">" + name + "</a>";
-		var result = document.createElement("a");
-		result.href = "javascript:showComments('" + name + "');"
-		result.textContent = name;
+		var nameButton = createStyledMessage(name);
+		nameButton.className += " clickable";
 
-		document.getElementById("content").appendChild(result);
+		nameButton.onclick = showCommentsMaker(name);
+
+		document.getElementById("content").appendChild(nameButton);
 
 	}
 
 };
 
-// but hey it works... kinda
+// weirdest pattern ever
+function showCommentsMaker(name) {
+
+	return function(){showComments(name);};
+
+}
+
+// the event handler mentioned above, adds the person's comments to content
 function showComments(name) {
 
 	var userComments = document.createElement("div");
@@ -303,7 +305,11 @@ function addQueryToSidebar(query) {
 	editButton.query = query;
 	editButton.onclick = function () {
 
-		QUERIES["Make A New Query"](undefined, this.query, localStorage[this.query]);
+		var queryText;
+		if (!localStorage[this.query]) {queryText = QUERIES[this.query].toString();}
+		else {queryText = localStorage[this.query];}
+
+		QUERIES["Make A New Query"](undefined, this.query, queryText);
 
 	};
 

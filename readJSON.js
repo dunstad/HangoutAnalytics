@@ -80,29 +80,36 @@ function randInt(min, max) {
 
 }
 
-// turns a message into DOM nodes
-function toString(message) {
+// make fancy looking divs for messages and other text
+function createStyledMessage(name, text, time) {
 
 	var messageContainer = document.createElement("div");
 	messageContainer.className = "message";
 
-	var sender = document.createElement("div");
-	sender.className = "sender";
-	sender.textContent = message.sender;
+	var nameContainer = document.createElement("div");
+	nameContainer.className = "sender";
+	nameContainer.textContent = name;
 
-	var content = document.createElement("div");
-	content.className = "content";
-	content.textContent = message.text;
+	var textContainer = document.createElement("div");
+	textContainer.className = "content";
+	textContainer.textContent = text;
 
-	var date = document.createElement("div");
-	date.className = "date";
-	date.textContent = new Date(message.time);
+	var timeContainer = document.createElement("div");
+	timeContainer.className = "time";
+	timeContainer.textContent = new Date(time);
 
-	messageContainer.appendChild(sender);
-	messageContainer.appendChild(content);
-	messageContainer.appendChild(date);
+	if (name) {messageContainer.appendChild(nameContainer);}
+	if (text) {messageContainer.appendChild(textContainer);}
+	if (time) {messageContainer.appendChild(timeContainer);}
 
 	return messageContainer;
+
+}
+
+// turns a message into DOM nodes
+function toString(message) {
+
+	return createStyledMessage(message.sender, message.text, message.time);
 
 }
 

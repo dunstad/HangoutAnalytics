@@ -49,6 +49,7 @@ word-wrap: break-word;
 {
 background-color: #272B33;
 max-height: 30px;
+cursor: default;
 }
 
 .clickable:hover
@@ -122,7 +123,7 @@ background-color:inherit;
 padding: inherit;
 }
 
-.date
+.time
 {
 font-size: 50%;
 background-color:inherit;
