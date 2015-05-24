@@ -1,27 +1,104 @@
 *
 {
-border:0px;
-margin:0px;
-padding:0px;
+border: 0px;
+margin: 0px;
+padding: 0px;
+background-color: #20242a;
+color: #9CA4B4;
+/*font-size: 13;*/
+}
+
+html, body
+{
+height: 100%;
+width: 100%;
 }
 
 #navigation
 {
-padding:10px;
-margin:10px;
-margin-top:0px;
-float:left;
-border-right:1px solid black;
-height:100%;
+float: left;
+border-right: 1px solid black;
+
+display: flex;
+flex-direction: column;
+align-items: stretch;
 }
 
 #content
 {
-padding:10px;
+background-color: #272B33;
+/* this prevents horizontal scrollbars from popping up */
+word-wrap: break-word;
+}
+
+.flexContainer
+{
+display: flex;
+flex-direction: row;
+align-items: center;
 }
 
 button
 {
-padding:3px;
-margin:5px;
+height: 27px;
+margin: 2px 0px 2px 0px;
+padding: 6px;
+display: flex;
+flex: 1;
+}
+
+.clickable
+{
+background-color: #272B33;
+max-height: 30px;
+}
+
+.clickable:hover
+{
+background-color: #30353F;
+color: #C8D5EE;
+}
+
+img
+{
+width: 27px;
+height: 27px;
+background-size: 100%;
+background-repeat: no-repeat;
+background-position: bottom right;
+margin:0px;
+}
+
+.editButton
+{
+background-image: url(edit.png);
+}
+
+.editButton:hover
+{
+background-image: url(edit_bright.png);
+}
+
+.deleteButton
+{
+background-image: url(delete.png);
+}
+
+.deleteButton:hover
+{
+background-image: url(delete_bright.png);
+}
+
+input
+{
+/* in a later version, this will start in content div, then be hidden */
+margin: 2px;
+}
+
+.scroller
+{
+padding-left: 10px;
+padding-right: 10px;
+height: 100%;
+overflow-y: auto;
 }
