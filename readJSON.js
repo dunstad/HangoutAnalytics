@@ -221,4 +221,3 @@ function connectSegment(segment) {
 	return text;
 
 }
-// testing git broken stuff
