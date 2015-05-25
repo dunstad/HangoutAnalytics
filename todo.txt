@@ -1,8 +1,8 @@
 improvements
-	make codemirror not look like butt
-	allow overwriting of queries with prompt
 	gatherer for messages
-	remove delete buttons from default queries?
+	allow overwriting of queries with prompt
+	customize codemirror style
+	remove delete/edit buttons from default queries?
 	allow user to choose which conversation the data comes from?
 
 queries

@@ -18,7 +18,7 @@ QUERIES["Make A New Query"] = function(e, title, code) {
 	var codeField = document.createElement("textarea");
 	codeField.rows = 50;
 	codeField.cols = 80;
-	codeField.style.border = "solid 1px";
+	codeField.style.border = "solid 1px black";
 	codeField.id = "codeField";
 	if (code) {codeField.value = code;}
 
@@ -56,8 +56,8 @@ QUERIES["Make A New Query"] = function(e, title, code) {
 	textArea.appendChild(document.createElement("br"));
 	textArea.appendChild(submit);
 
-	// reducing the size of the penises the editor sucks
-	var myCodeMirror = CodeMirror.fromTextArea(codeField, {"lineNumbers": true});
+	var myCodeMirror = CodeMirror.fromTextArea(codeField,
+		{"lineNumbers": true, "mode":"javascript", "theme": "mbo"});
 
 };
 
