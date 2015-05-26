@@ -16,17 +16,14 @@ var PARTICIPANTS = createParticipantMap(CONVERSATIONS);
 // cuts the size of the json file by like 7x
 var MESSAGES = [];
 
-// sort messages by timestamp
-MESSAGES.sort(function(a, b) {return (b.text.length - a.text.length);});
+// add sorting by timestamp
+MESSAGES.sort(function(a, b){return a.time - b.time;});
 
 for (var i = 0; i < MESSAGELIST.length; i++) {
 
 	MESSAGES.push(getMessageData(i));
 
 }
-
-// add sorting by timestamp
-MESSAGES.sort(function(a, b){return a.time - b.time;});
 
 // the messages are seriously distracting while trying to code
 if (debug) {

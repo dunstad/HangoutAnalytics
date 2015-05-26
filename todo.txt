@@ -1,5 +1,6 @@
 improvements
-	gatherer for messages
+	allow forms to submit when enter is pressed
+	make adding messages to the content area asynchronous
 	update guide to work with cool new styling tools
 	allow overwriting of queries with prompt
 	customize codemirror style

@@ -274,10 +274,14 @@ function showHidden() {
 // not really very useful
 QUERIES["Longest Hundred Messages"] = function() {
 
+	// clone the messagelist so we only have to sort it once
+	var messageLengths = MESSAGES.slice(0);
+	messageLengths.sort(function(a, b) {return (b.text.length - a.text.length);});
+	
 	removeChildren(document.getElementById("content"));
 	for (var i = 0; i < 100; i++) {
 
-		document.getElementById("content").appendChild(toString(MESSAGES[i]));
+		document.getElementById("content").appendChild(toString(messageLengths[i]));
 
 	}
 
