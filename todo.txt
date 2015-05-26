@@ -1,11 +1,13 @@
 improvements
-	allow forms to submit when enter is pressed
+	clickable class not changing text color on search button
 	make adding messages to the content area asynchronous
-	update guide to work with cool new styling tools
+	allow forms to submit when enter is pressed
+	fix default queries load in unsavable state
 	allow overwriting of queries with prompt
-	customize codemirror style
+	update guide to work with cool new styling tools
 	remove delete/edit buttons from default queries?
 	allow user to choose which conversation the data comes from?
+	customize codemirror style
 
 queries
 	humor stats
