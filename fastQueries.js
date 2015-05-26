@@ -101,7 +101,7 @@ QUERIES["Gatherer"] = function() {
 	formContainer.appendChild(dateToInput);
 	formContainer.appendChild(dateStringInput);
 
-	var submit = createStyledMessage(undefined, "Submit");
+	var submit = createStyledMessage(undefined, "Search");
 	submit.className += " clickable";
 	submit.onclick = function() {
 
@@ -171,7 +171,7 @@ QUERIES["Word Count"] = function() {
 	searchForm.placeholder = "Word to Count";
 
 
-	var submit = createStyledMessage(undefined, "Submit");
+	var submit = createStyledMessage(undefined, "Count");
 	submit.className += " clickable";
 	submit.id = "submit";
 	submit.onclick = function() {
@@ -409,7 +409,9 @@ function addQueryToSidebar(query) {
 		if (!localStorage[this.query]) {queryText = QUERIES[this.query].toString();}
 		else {queryText = localStorage[this.query];}
 
-		QUERIES["Make A New Query"](undefined, this.query, queryText);
+		// this should definitely not be a variable
+		// not sure how i would store it at the moment though
+		QUERIES["Make a New Query"](undefined, this.query, queryText);
 
 	};
 
