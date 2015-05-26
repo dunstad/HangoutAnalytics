@@ -5,7 +5,7 @@
 QUERIES = {};
 
 // here are the default queries
-QUERIES["Make A New Query"] = function(e, title, code) {
+QUERIES["Make a New Query"] = function(e, title, code) {
 
 	var textArea = document.getElementById("content");
 
@@ -61,15 +61,119 @@ QUERIES["Make A New Query"] = function(e, title, code) {
 
 };
 
+// makes writing the Gatherer query easier
+function createInputForm(id, placeholder) {
+
+	var inputForm = document.createElement("input");
+	inputForm.type = "content";
+	inputForm.id = id;
+	inputForm.placeholder = placeholder;
+	return inputForm;
+
+}
+
+
+// also for the Gatherer query
+function createRegExpFromInputId(inputId) {
+
+	return new RegExp(document.getElementById(inputId).value);
+
+}
+
+// I'm going to have to rename this
+QUERIES["Gatherer"] = function() {
+
+	var tooltip = "Search through your Hangouts, the easy way. " +
+		"Sender, Message Content, and Date String fields accept regular expressions. " +
+		"Earliest Date and Latest Date accept strings like \"May 15 2015\".";
+
+	var formContainer = createStyledMessage("Gatherer", tooltip);
+
+	var senderInput = createInputForm("sender", "Sender");
+	var textInput = createInputForm("text", "Message Content");
+	var dateFromInput = createInputForm("dateFrom", "Earliest Date");
+	var dateToInput = createInputForm("dateTo", "Latest Date");
+	var dateStringInput = createInputForm("dateString", "Date String");
+
+	formContainer.appendChild(senderInput);
+	formContainer.appendChild(textInput);
+	formContainer.appendChild(dateFromInput);
+	formContainer.appendChild(dateToInput);
+	formContainer.appendChild(dateStringInput);
+
+	var submit = createStyledMessage(undefined, "Submit");
+	submit.className += " clickable";
+	submit.onclick = function() {
+
+		var resultsContainer = document.getElementById("resultsContainer");
+		removeChildren(resultsContainer);
+
+		var senderExpression = createRegExpFromInputId("sender");
+		var textExpression = createRegExpFromInputId("text");
+		var dateFromExpression = document.getElementById("dateFrom").value;
+		var dateToExpression = document.getElementById("dateTo").value;
+		var dateStringExpression = createRegExpFromInputId("dateString");
+
+		// in case date range fields are left blank
+		if (!dateFromExpression) {
+
+			// earliest date I managed to get
+			dateFromExpression = "Jan 1 100";
+
+		}
+
+		if (!dateToExpression) {
+
+			// this should last us a decent while
+			dateToExpression = "Dec 31 275759";
+
+		}
+
+		for (var i = 0; i < MESSAGES.length; i++) {
+
+			// if the messages matches all the search criteria
+			if (senderExpression.test(MESSAGES[i].sender) &&
+				textExpression.test(MESSAGES[i].text) &&
+				new Date(dateFromExpression) <= new Date(MESSAGES[i].time) &&
+				new Date(dateToExpression) >= new Date(MESSAGES[i].time) &&
+				dateStringExpression.test(new Date(MESSAGES[i].time).toString())) {
+
+				resultsContainer.appendChild(toString(MESSAGES[i]));
+
+			}
+
+		}
+
+	};
+
+	var resultsContainer = document.createElement("div");
+	resultsContainer.id = "resultsContainer";
+
+	var contentArea = document.getElementById("content");
+	removeChildren(contentArea);
+	contentArea.appendChild(formContainer);
+	contentArea.appendChild(submit);
+	contentArea.appendChild(resultsContainer);
+
+	// under construction message
+	// removeChildren(document.getElementById("content"));
+	// var underConstruction = createStyledMessage("dunstad", "Under Construction");
+	// document.getElementById("content").appendChild(underConstruction);
+
+};
+
 QUERIES["Word Count"] = function() {
 
 	var searchForm = document.createElement('input');
 	searchForm.type = "content";
 	searchForm.style.border = "solid 1px";
 	searchForm.id = "searchForm";
+	searchForm.placeholder = "Word to Count";
 
-	var submit = document.createElement("button");
-	submit.type = "button";
+
+	var submit = createStyledMessage(undefined, "Submit");
+	submit.className += " clickable";
+	submit.id = "submit";
 	submit.onclick = function() {
 
 	  /* delete old results, if present */
@@ -91,16 +195,12 @@ QUERIES["Word Count"] = function() {
 
 	  }
 
-	  console.log(searchMessages);
-
 	  var people = {};
 	  for (var name in PROFILES) {
 
 		people[name] = 0;
 
 	  }
-
-	  console.log(people);
 
 	  for (var i = 0; i < searchMessages.length; i++) {
 
@@ -112,7 +212,7 @@ QUERIES["Word Count"] = function() {
 	  spanContainer.id = "results";
 	  for (var name in people) {
 
-			spanContainer.appendChild(document.createTextNode(name + ": " + people[name]));
+			spanContainer.appendChild(createStyledMessage(name, people[name]));
 
 	  }
 
@@ -121,14 +221,15 @@ QUERIES["Word Count"] = function() {
 	  searchForm.value = "";
 
 	};
-	submit.textContent = "Submit";
-	submit.id = "submit";
 
+	var formContainer = createStyledMessage("Word Count", "See who said what how many times.");
+	formContainer.appendChild(searchForm);
 
-	removeChildren(document.getElementById("content"));
-	document.getElementById("content").appendChild(searchForm);
-	document.getElementById("content").appendChild(submit);
-	document.getElementById("content").appendChild(document.createElement("br"));
+	var contentArea = document.getElementById("content");
+	removeChildren(contentArea);
+	contentArea.appendChild(formContainer);
+	contentArea.appendChild(submit);
+	contentArea.appendChild(document.createElement("br"));
 
 };
 
@@ -141,7 +242,7 @@ QUERIES["Random Message"] = function() {
 };
 
 // a slightly less terrible implementation than the previous one
-QUERIES["Whose Line Is It Anyway?"] = function() {
+QUERIES["Whose Line is it Anyway?"] = function() {
 
 	var randomMessage = MESSAGES[randInt(0, MESSAGES.length)];
 	/* will run forever if nobody has ever sent a message longer than 4 characters
@@ -171,9 +272,7 @@ function showHidden() {
 }
 
 // not really very useful
-QUERIES["Longest 100 Messages"] = function() {
-
-	MESSAGES.sort(function(a, b) {return (b.text.length - a.text.length);});
+QUERIES["Longest Hundred Messages"] = function() {
 
 	removeChildren(document.getElementById("content"));
 	for (var i = 0; i < 100; i++) {
@@ -243,7 +342,8 @@ QUERIES["Average Message Length"] = function() {
 };
 
 // list out names of chat participants and add an event handler
-QUERIES["Comments By User"] = function() {
+// entirely redundant thanks to Gatherer, but I'll leave it in for now
+QUERIES["Comments by User"] = function() {
 
 	if (PROFILES[MESSAGES[0].sender] === undefined) {buildProfiles();}
 
@@ -356,3 +456,6 @@ for (var query in QUERIES) {
 	addQueryToSidebar(query);
 
 }
+
+// drop us onto the search page once the json file has been read
+QUERIES["Gatherer"]();

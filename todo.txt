@@ -1,5 +1,6 @@
 improvements
 	gatherer for messages
+	update guide to work with cool new styling tools
 	allow overwriting of queries with prompt
 	customize codemirror style
 	remove delete/edit buttons from default queries?

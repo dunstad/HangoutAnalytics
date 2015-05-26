@@ -9,6 +9,12 @@ text-align: left;
 font-family: Arial, Verdana, sans-serif;
 }
 
+/* revert the background color given to links above */
+a
+{
+background-color: inherit;
+}
+
 html, body
 {
 height: 100%;
@@ -90,8 +96,16 @@ background-image: url(delete_bright.png);
 
 input
 {
-/* in a later version, this will start in content div, then be hidden */
-margin: 2px;
+margin: 5px;
+padding: 5px;
+border: 1px solid;
+}
+
+#file
+{
+margin-left: 0px;
+margin-right: 0px;
+border: 0px;
 }
 
 .scroller

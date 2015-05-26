@@ -15,6 +15,10 @@ var PARTICIPANTS = createParticipantMap(CONVERSATIONS);
 // throw away all of google's information about our diets and sex lives
 // cuts the size of the json file by like 7x
 var MESSAGES = [];
+
+// sort messages by timestamp
+MESSAGES.sort(function(a, b) {return (b.text.length - a.text.length);});
+
 for (var i = 0; i < MESSAGELIST.length; i++) {
 
 	MESSAGES.push(getMessageData(i));
