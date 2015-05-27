@@ -5,6 +5,7 @@ improvements
 	fix default queries load in unsavable state
 	allow overwriting of queries with prompt
 	update guide to work with cool new styling tools
+	add view to see messages near one you click on; scroll or arrow button to load more
 	remove delete/edit buttons from default queries?
 	allow user to choose which conversation the data comes from?
 	customize codemirror style
